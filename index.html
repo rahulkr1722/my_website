@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Wishes - Share Your Love</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        .birthday-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-gradient {
+            background: linear-gradient(145deg, #ffffff 0%, #f8faff 100%);
+        }
+        
+        .dancing-text {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .poppins-text {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .floating-delayed {
+            animation: float 3s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        .form-float {
+            animation: formFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes formFloat {
+            0%, 100% { transform: translateY(0px); }
+            33% { transform: translateY(-5px); }
+            66% { transform: translateY(5px); }
+        }
+        
+        .wish-card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-birthday {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .celebration-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+        
+        .balloon-red { background: #ff4757; }
+        .balloon-blue { background: #3742fa; }
+        .balloon-yellow { background: #ffc048; }
+        .balloon-green { background: #2ed573; }
+        .balloon-purple { background: #a55eea; }
+        
+        .wishes-display {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s ease-out;
+        }
+        
+        .wishes-display.show {
+            max-height: 1000px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen birthday-gradient poppins-text">
+    <!-- Celebration Background -->
+    <div class="celebration-bg">
+        <div class="balloon balloon-red floating-animation" style="top: 20%; left: 10%;"></div>
+        <div class="balloon balloon-blue floating-delayed" style="top: 40%; left: 5%;"></div>
+        <div class="balloon balloon-yellow floating-animation" style="top: 60%; left: 15%;"></div>
+        <div class="balloon balloon-green floating-delayed" style="top: 30%; right: 10%;"></div>
+        <div class="balloon balloon-purple floating-animation" style="top: 50%; right: 5%;"></div>
+        <div class="balloon balloon-red floating-delayed" style="top: 70%; right: 15%;"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 min-h-screen flex items-center justify-center">
+        <div class="max-w-4xl w-full">
+            <!-- Header Section -->
+            <div class="text-center mb-12 fade-in">
+                <div class="mb-8">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c5dd778d-a2a6-496e-9191-77c87eb5c387.png" alt="Colorful birthday celebration with balloons, confetti, and a beautifully decorated birthday cake with lit candles against a festive background" class="mx-auto rounded-3xl shadow-2xl floating-animation" />
+                </div>
+                <h1 class="text-6xl md:text-8xl font-bold text-white dancing-text mb-4">
+                    Birthday Wishes
+                </h1>
+                <p class="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+                    Share your heartfelt birthday wishes and make someone's special day even more memorable. 
+                    Express your love, joy, and beautiful thoughts in your own unique way.
+                </p>
+            </div>
+
+            <!-- Main Card -->
+            <div class="wish-card rounded-3xl p-8 md:p-12 shadow-2xl form-float">
+                <!-- Form Section -->
+                <div id="wishForm">
+                    <h2 class="text-4xl font-bold text-gray-800 text-center mb-8 dancing-text">
+                        Create Your Personal Wish
+                    </h2>
+                    
+                    <form id="birthdayWishForm" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Name Input -->
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Your Name</label>
+                                <input type="text" id="senderName" required 
+                                    class="w-full px-4 py-4 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none input-focus text-lg"
+                                    placeholder="Enter your beautiful name">
+                            </div>
+
+                            <!-- Phone Number Input -->
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Your Phone Number</label>
+                                <input type="tel" id="phoneNumber" required 
+                                    class="w-full px-4 py-4 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none input-focus text-lg"
+                                    placeholder="Your contact number">
+                            </div>
+                        </div>
+
+                        <!-- Birthday Person's Details -->
+                        <div class="bg-pink-50 p-6 rounded-xl border-l-4 border-pink-400 space-y-4">
+                            <h3 class="text-xl font-semibold text-pink-800 dancing-text">Birthday Person Details</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <!-- Birthday Person Name -->
+                                <div class="relative">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Birthday Person's Name</label>
+                                    <input type="text" id="birthdayPersonName" required 
+                                        class="w-full px-4 py-4 border-2 border-pink-200 rounded-xl focus:border-pink-500 focus:outline-none input-focus text-lg"
+                                        placeholder="Who's birthday is it?">
+                                </div>
+
+                                <!-- Birthday Person Phone -->
+                                <div class="relative">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Birthday Person's Phone Number</label>
+                                    <input type="tel" id="birthdayPersonPhone" required 
+                                        class="w-full px-4 py-4 border-2 border-pink-200 rounded-xl focus:border-pink-500 focus:outline-none input-focus text-lg"
+                                        placeholder="We'll send wishes here">
+                                </div>
+                            </div>
+
+                            <!-- Birthday Person Email -->
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Birthday Person's Email (Optional)</label>
+                                <input type="email" id="birthdayPersonEmail" 
+                                    class="w-full px-4 py-4 border-2 border-pink-200 rounded-xl focus:border-pink-500 focus:outline-none input-focus text-lg"
+                                    placeholder="Email for wishes (optional)">
+                            </div>
+                        </div>
+
+                        <!-- Relationship Input -->
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Your Relationship</label>
+                            <select id="relationship" required 
+                                class="w-full px-4 py-4 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none input-focus text-lg">
+                                <option value="">Select your relationship...</option>
+                                <option value="Best Friend">Best Friend</option>
+                                <option value="Family Member">Family Member</option>
+                                <option value="Colleague">Colleague</option>
+                                <option value="Partner">Life Partner</option>
+                                <option value="Sibling">Brother/Sister</option>
+                                <option value="Parent">Parent</option>
+                                <option value="Child">Son/Daughter</option>
+                                <option value="Cousin">Cousin</option>
+                                <option value="Neighbor">Neighbor</option>
+                                <option value="Teacher">Teacher/Mentor</option>
+                                <option value="Other">Other Special Person</option>
+                            </select>
+                        </div>
+
+                        <!-- Birthday Wishes Text Area -->
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Your Beautiful Birthday Wishes</label>
+                            <textarea id="wishMessage" required rows="6"
+                                class="w-full px-4 py-4 border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:outline-none input-focus text-lg resize-none"
+                                placeholder="Write your heartfelt birthday wishes here... Express your love, memories, hopes, and all the beautiful thoughts you want to share on their special day!"></textarea>
+                            <div class="text-sm text-gray-500 mt-2">
+                                Tip: Share a special memory, express gratitude, or wish them amazing adventures ahead!
+                            </div>
+                        </div>
+
+                        <!-- Delivery Options -->
+                        <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-400">
+                            <h3 class="text-xl font-semibold text-blue-800 dancing-text mb-4">How should we deliver your wishes?</h3>
+                            
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="deliveryMethod" value="whatsapp" checked 
+                                        class="w-5 h-5 text-blue-600">
+                                    <span class="text-gray-700 font-medium">Send via WhatsApp</span>
+                                    <span class="text-sm text-gray-500">(Instant delivery)</span>
+                                </label>
+                                
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="deliveryMethod" value="email" 
+                                        class="w-5 h-5 text-blue-600">
+                                    <span class="text-gray-700 font-medium">Send via Email</span>
+                                    <span class="text-sm text-gray-500">(If email provided)</span>
+                                </label>
+                                
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="deliveryMethod" value="schedule" 
+                                        class="w-5 h-5 text-blue-600">
+                                    <span class="text-gray-700 font-medium">Schedule for specific time</span>
+                                    <span class="text-sm text-gray-500">(Set delivery time)</span>
+                                </label>
+                            </div>
+
+                            <!-- Schedule Time (hidden by default) -->
+                            <div id="scheduleTime" class="mt-4 hidden">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Schedule Delivery Time</label>
+                                <input type="datetime-local" id="deliveryTime" 
+                                    class="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:outline-none input-focus"
+                                    min="">
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center pt-6">
+                            <button type="submit" 
+                                class="btn-birthday text-white px-12 py-4 rounded-full text-xl font-semibold shadow-lg transform hover:scale-105 transition-all duration-300 hover:shadow-xl">
+                                Send Birthday Magic ✨
+                            </button>
+                            <div class="mt-3 text-sm text-gray-600">
+                                Your wishes will be delivered to the birthday person automatically!
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Wishes Display Section -->
+                <div id="wishesDisplay" class="wishes-display mt-8">
+                    <div class="text-center">
+                        <div class="mb-6">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1c703b63-6371-42e4-bde6-680c1e7fe84f.png" alt="Joyful birthday celebration scene with happy people, colorful decorations, birthday cake, and festive atmosphere capturing the essence of birthday joy and togetherness" class="mx-auto rounded-2xl shadow-lg floating-animation" />
+                        </div>
+                        <h3 class="text-4xl font-bold text-purple-800 dancing-text mb-6">
+                            Your Birthday Wish Has Been Sent! 🎉
+                        </h3>
+                        
+                        <!-- Delivery Status -->
+                        <div id="deliveryStatus" class="mb-6 p-4 bg-green-100 border border-green-300 rounded-xl">
+                            <div class="flex items-center justify-center space-x-2">
+                                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <span class="text-green-800 font-semibold">Wishes delivered successfully!</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Wish Card Display -->
+                        <div id="wishCard" class="card-gradient rounded-2xl p-8 shadow-xl border-l-4 border-purple-500">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+
+                        <!-- Share Options -->
+                        <div class="mt-8 space-y-4">
+                            <h4 class="text-2xl font-semibold text-gray-800">Share Your Wishes</h4>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <button onclick="shareToWhatsApp()" 
+                                    class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold transition-colors">
+                                    Share on WhatsApp
+                                </button>
+                                <button onclick="copyWishText()" 
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold transition-colors">
+                                    Copy Wish Text
+                                </button>
+                                <button onclick="generateShareableLink()" 
+                                    class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full font-semibold transition-colors">
+                                    Generate Shareable Link
+                                </button>
+                                <button onclick="downloadWish()" 
+                                    class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-full font-semibold transition-colors">
+                                    Download as Image
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Shareable Link Display -->
+                        <div id="shareableLinkDiv" class="mt-6 hidden">
+                            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+                                <h5 class="font-semibold text-yellow-800 mb-2">📱 Mobile-Friendly Link Generated!</h5>
+                                <div class="bg-white p-3 rounded border">
+                                    <input type="text" id="shareableLink" readonly 
+                                        class="w-full text-sm text-gray-700 outline-none cursor-pointer"
+                                        onclick="this.select(); copyShareableLink();"
+                                        placeholder="Click to copy link...">
+                                </div>
+                                <div class="mt-3 flex flex-wrap gap-2">
+                                    <button onclick="copyShareableLink()" 
+                                        class="text-xs bg-yellow-600 text-white px-3 py-1 rounded-full hover:bg-yellow-700 transition-colors">
+                                        Copy Link
+                                    </button>
+                                    <button onclick="shareViaWhatsAppLink()" 
+                                        class="text-xs bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 transition-colors">
+                                        Share Link via WhatsApp
+                                    </button>
+                                    <button onclick="shareViaEmail()" 
+                                        class="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors">
+                                        Send Link via Email
+                                    </button>
+                                </div>
+                                <p class="text-xs text-yellow-700 mt-2">
+                                    📱 <strong>For Mobile Access:</strong> Upload this website to a hosting service (Netlify, Vercel, GitHub Pages) first. Local URLs (127.0.0.1) don't work on mobile devices.
+                                </p>
+                                <div class="mt-2 text-xs text-blue-700">
+                                    🌐 <strong>Quick Setup:</strong> 
+                                    <br>1. Upload files to GitHub
+                                    <br>2. Enable GitHub Pages
+                                    <br>3. Update the baseUrl in generateShareableLink()
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Create Another Wish Button -->
+                        <div class="mt-8">
+                            <button onclick="createAnotherWish()" 
+                                class="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all">
+                                Create Another Wish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-12">
+                <p class="text-white/80 text-lg">
+                    Made with ❤️ for spreading birthday joy and happiness
+                </p>
+                <div class="mt-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0b27ef5b-4b85-48f2-a31c-b3d2d6f988b4.png" alt="Decorative border with birthday elements including balloons, party hats, gift boxes, and celebratory symbols arranged in an elegant horizontal pattern" class="mx-auto opacity-70 rounded-lg" />
+                </div>
+                
+                <!-- Developer Credits -->
+                <div class="mt-8 bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <h3 class="text-xl font-semibold text-white dancing-text mb-4">Platform Developer</h3>
+                    <div class="space-y-2">
+                        <p class="text-white/90 font-medium">
+                            👨‍💻 Developed by: <span class="text-yellow-300 font-bold">Rahul Kumar</span>
+                        </p>
+                        <p class="text-white/90">
+                            📱 Contact: <a href="tel:+918873944597" class="text-green-300 hover:text-green-200 font-semibold transition-colors">+918873944597</a>
+                        </p>
+                        <p class="text-white/70 text-sm mt-3">
+                            Need custom development or support? Feel free to reach out!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentWishData = {};
+
+        // Form submission handler
+        document.getElementById('birthdayWishForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                senderName: document.getElementById('senderName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                relationship: document.getElementById('relationship').value,
+                wishMessage: document.getElementById('wishMessage').value,
+                birthdayPersonName: document.getElementById('birthdayPersonName').value,
+                birthdayPersonPhone: document.getElementById('birthdayPersonPhone').value,
+                birthdayPersonEmail: document.getElementById('birthdayPersonEmail').value,
+                deliveryMethod: document.querySelector('input[name="deliveryMethod"]:checked').value,
+                deliveryTime: document.getElementById('deliveryTime').value
+            };
+
+            // Store current wish data
+            currentWishData = formData;
+
+            // Send the birthday wish
+            sendBirthdayWish(formData);
+            
+            // Create and display the wish
+            displayWish(formData);
+            
+            // Show the wishes display section
+            const wishesDisplay = document.getElementById('wishesDisplay');
+            wishesDisplay.classList.add('show');
+            
+            // Scroll to the wishes section
+            setTimeout(() => {
+                wishesDisplay.scrollIntoView({ behavior: 'smooth' });
+            }, 200);
+        });
+
+        function displayWish(data) {
+            const wishCard = document.getElementById('wishCard');
+            const currentDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            wishCard.innerHTML = `
+                <div class="text-left space-y-4">
+                    <div class="border-b border-purple-200 pb-4">
+                        <h5 class="text-2xl font-bold text-purple-800 dancing-text">🎂 Special Birthday Wishes 🎂</h5>
+                        <p class="text-sm text-gray-600">Created on ${currentDate}</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <strong class="text-purple-700">From:</strong>
+                            <p class="text-gray-800">${data.senderName}</p>
+                        </div>
+                        <div>
+                            <strong class="text-purple-700">Contact:</strong>
+                            <p class="text-gray-800">${data.phoneNumber}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <strong class="text-purple-700">Relationship:</strong>
+                        <p class="text-gray-800">${data.relationship}</p>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-6 rounded-xl border-l-4 border-purple-400">
+                        <strong class="text-purple-700 block mb-3 text-lg">💝 Birthday Message:</strong>
+                        <p class="text-gray-800 leading-relaxed text-lg italic">"${data.wishMessage}"</p>
+                    </div>
+                    
+                    <div class="text-center pt-4">
+                        <p class="text-purple-600 font-semibold">🌟 Wishing you all the happiness in the world! 🌟</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function shareToWhatsApp() {
+            const message = formatWishForDelivery(currentWishData);
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function sendBirthdayWish(data) {
+            // Format the birthday message
+            const wishMessage = formatWishForDelivery(data);
+            
+            if (data.deliveryMethod === 'whatsapp') {
+                sendViaWhatsApp(data.birthdayPersonPhone, wishMessage);
+            } else if (data.deliveryMethod === 'email' && data.birthdayPersonEmail) {
+                sendViaEmail(data.birthdayPersonEmail, wishMessage);
+            } else if (data.deliveryMethod === 'schedule') {
+                scheduleWish(data);
+            }
+            
+            // Store wish in local storage
+            storeBirthdayWish(data);
+        }
+
+        function formatWishForDelivery(data) {
+            return `🎉 HAPPY BIRTHDAY ${data.birthdayPersonName.toUpperCase()}! 🎉
+
+Someone special has sent you birthday wishes!
+
+💝 From: ${data.senderName} (${data.relationship})
+📱 Contact: ${data.phoneNumber}
+
+🌟 Birthday Message:
+"${data.wishMessage}"
+
+🎂 Have an amazing birthday filled with love, laughter, and wonderful memories!
+
+✨ Sent with love via Birthday Wishes Platform ✨`;
+        }
+
+        function sendViaWhatsApp(phoneNumber, message) {
+            // Format phone number and create WhatsApp URL
+            const cleanPhone = phoneNumber.replace(/\D/g, '');
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+            
+            // Check if on mobile device
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // On mobile, open WhatsApp directly
+                window.location.href = whatsappUrl;
+            } else {
+                // On desktop, open in new tab
+                window.open(whatsappUrl, '_blank');
+            }
+            
+            // Show confirmation
+            showDeliveryConfirmation('WhatsApp');
+        }
+
+        function sendViaEmail(email, message) {
+            const subject = 'Happy Birthday! Someone sent you special wishes! 🎉';
+            const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            
+            window.open(mailtoUrl);
+            showDeliveryConfirmation('Email');
+        }
+
+        function scheduleWish(data) {
+            const deliveryTime = new Date(data.deliveryTime);
+            const now = new Date();
+            
+            if (deliveryTime > now) {
+                const timeUntilDelivery = deliveryTime - now;
+                
+                setTimeout(() => {
+                    sendBirthdayWish({...data, deliveryMethod: 'whatsapp'});
+                }, Math.min(timeUntilDelivery, 300000)); // Max 5 minutes for demo
+                
+                showScheduleConfirmation(deliveryTime);
+            }
+        }
+
+        function storeBirthdayWish(data) {
+            // Store in localStorage
+            const wishes = JSON.parse(localStorage.getItem('birthdayWishes') || '[]');
+            wishes.push({
+                ...data,
+                timestamp: new Date().toISOString(),
+                id: Date.now()
+            });
+            localStorage.setItem('birthdayWishes', JSON.stringify(wishes));
+        }
+
+        function showDeliveryConfirmation(method) {
+            const status = document.getElementById('deliveryStatus');
+            status.innerHTML = `
+                <div class="flex items-center justify-center space-x-2">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-green-800 font-semibold">Wishes sent via ${method} successfully! 🎉</span>
+                </div>
+            `;
+        }
+
+        function showScheduleConfirmation(deliveryTime) {
+            const status = document.getElementById('deliveryStatus');
+            const timeStr = deliveryTime.toLocaleString();
+            status.innerHTML = `
+                <div class="flex items-center justify-center space-x-2">
+                    <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span class="text-blue-800 font-semibold">Wishes scheduled for ${timeStr} 📅</span>
+                </div>
+            `;
+            status.className = 'mb-6 p-4 bg-blue-100 border border-blue-300 rounded-xl';
+        }
+
+        function copyWishText() {
+            const textToCopy = formatWishForDelivery(currentWishData);
+            
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                alert('Birthday wish copied to clipboard! 📋✨');
+            });
+        }
+
+        function downloadWish() {
+            // Create a canvas to generate image
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 800;
+            canvas.height = 600;
+
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Add text content
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 32px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🎉 BIRTHDAY WISHES 🎉', canvas.width/2, 60);
+
+            ctx.font = '20px Arial';
+            ctx.textAlign = 'left';
+            const lines = [
+                `From: ${currentWishData.senderName}`,
+                `Relationship: ${currentWishData.relationship}`,
+                `Contact: ${currentWishData.phoneNumber}`,
+                '',
+                '💝 Birthday Message:',
+                `"${currentWishData.wishMessage}"`
+            ];
+
+            let y = 120;
+            lines.forEach(line => {
+                if (line.includes('Birthday Message:')) {
+                    ctx.font = 'bold 22px Arial';
+                    ctx.fillStyle = '#ffd700';
+                } else if (line.startsWith('"') && line.endsWith('"')) {
+                    ctx.font = 'italic 18px Arial';
+                    ctx.fillStyle = '#ffffff';
+                    // Word wrap for long messages
+                    const words = line.split(' ');
+                    let currentLine = '';
+                    words.forEach(word => {
+                        const testLine = currentLine + word + ' ';
+                        const metrics = ctx.measureText(testLine);
+                        if (metrics.width > 700) {
+                            ctx.fillText(currentLine, 50, y);
+                            currentLine = word + ' ';
+                            y += 25;
+                        } else {
+                            currentLine = testLine;
+                        }
+                    });
+                    if (currentLine) {
+                        ctx.fillText(currentLine, 50, y);
+                    }
+                } else {
+                    ctx.font = '18px Arial';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(line, 50, y);
+                }
+                y += 30;
+            });
+
+            // Add footer
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = '#ffd700';
+            ctx.textAlign = 'center';
+            ctx.fillText('🌟 Wishing you all the happiness in the world! 🌟', canvas.width/2, canvas.height - 40);
+
+            // Download the image
+            const link = document.createElement('a');
+            link.download = 'birthday-wish.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function createAnotherWish() {
+            // Hide wishes display
+            const wishesDisplay = document.getElementById('wishesDisplay');
+            wishesDisplay.classList.remove('show');
+            
+            // Reset form
+            document.getElementById('birthdayWishForm').reset();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Add sparkles animation
+        function createSparkles() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * 100 + 'vw';
+                    sparkle.style.top = Math.random() * 100 + 'vh';
+                    sparkle.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        sparkle.remove();
+                    }, 3000);
+                }, i * 200);
+            }
+        }
+
+        // Create sparkles every 5 seconds
+        setInterval(createSparkles, 5000);
+
+        // Initial sparkles
+        createSparkles();
+
+        // Add floating effect to form inputs
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0px)';
+            });
+        });
+
+        // Handle delivery method changes
+        document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const scheduleDiv = document.getElementById('scheduleTime');
+                const deliveryTimeInput = document.getElementById('deliveryTime');
+                
+                if (this.value === 'schedule') {
+                    scheduleDiv.classList.remove('hidden');
+                    deliveryTimeInput.required = true;
+                    
+                    // Set minimum time to current time
+                    const now = new Date();
+                    now.setMinutes(now.getMinutes() + 1);
+                    deliveryTimeInput.min = now.toISOString().slice(0, 16);
+                } else {
+                    scheduleDiv.classList.add('hidden');
+                    deliveryTimeInput.required = false;
+                }
+            });
+        });
+
+        function generateShareableLink() {
+            // Encode the wish data
+            const encodedData = btoa(JSON.stringify(currentWishData));
+            
+            // Get current URL without parameters
+            const baseUrl = window.location.origin + window.location.pathname;
+            
+            // For local development (localhost), use a public hosting service URL placeholder
+            let publicUrl = baseUrl;
+            if (baseUrl.includes('127.0.0.1') || baseUrl.includes('localhost')) {
+                // Replace with your actual hosted URL when deploying
+                // For development, show a message about hosting
+                alert('📱 To share on mobile devices, you need to host this website online.\n\n🌐 Upload to: Netlify, Vercel, GitHub Pages, or any web hosting service.\n\n💡 Then update the baseUrl in generateShareableLink() function with your hosted URL.');
+                
+                // Use a placeholder for demonstration
+                publicUrl = 'https://your-website.netlify.app/index.html'; // Replace with actual hosted URL
+            }
+            
+            // Create shareable link
+            const shareableUrl = `${publicUrl}?wish=${encodedData}`;
+            
+            // Display the link
+            document.getElementById('shareableLink').value = shareableUrl;
+            document.getElementById('shareableLinkDiv').classList.remove('hidden');
+            
+            // Auto-scroll to the link
+            document.getElementById('shareableLinkDiv').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyShareableLink() {
+            const linkInput = document.getElementById('shareableLink');
+            linkInput.select();
+            navigator.clipboard.writeText(linkInput.value).then(function() {
+                alert('✨ Link copied! Share this with anyone to send birthday wishes instantly! 📱');
+            });
+        }
+
+        function shareViaWhatsAppLink() {
+            const link = document.getElementById('shareableLink').value;
+            
+            // Check if it's a local URL
+            if (link.includes('127.0.0.1') || link.includes('localhost')) {
+                alert('🚨 Cannot share local URLs!\n\n📱 To share on mobile:\n1. Upload to GitHub/Netlify/Vercel\n2. Get public URL\n3. Update baseUrl in code\n\n💡 Local URLs only work on your computer!');
+                return;
+            }
+            
+            const message = `🎉 Send Birthday Wishes! 🎉\n\nClick this link to send a special birthday message:\n${link}\n\n✨ Works perfectly on mobile phones! 📱`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function shareViaEmail() {
+            const link = document.getElementById('shareableLink').value;
+            
+            // Check if it's a local URL
+            if (link.includes('127.0.0.1') || link.includes('localhost')) {
+                alert('🚨 Cannot share local URLs!\n\n📧 To email this link:\n1. Host website online first\n2. Get public URL\n3. Then share via email\n\n💡 Recipients need a public URL to access!');
+                return;
+            }
+            
+            const subject = '🎂 Birthday Wishes - Send a Special Message!';
+            const body = `🎉 Hi there!\n\nSomeone has created a special birthday wish that you can send!\n\n📱 Click this mobile-friendly link:\n${link}\n\n✨ It works perfectly on any phone or device and will send the birthday message instantly!\n\nSpread the birthday joy! 🎂🎉`;
+            
+            const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoUrl);
+        }
+
+        function loadWishFromURL() {
+            // Check if there's a wish parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const wishData = urlParams.get('wish');
+            
+            if (wishData) {
+                try {
+                    // Decode the wish data
+                    const decodedData = JSON.parse(atob(wishData));
+                    
+                    // Auto-send the wish
+                    currentWishData = decodedData;
+                    
+                    // Show loading message
+                    document.body.innerHTML = `
+                        <div class="min-h-screen birthday-gradient flex items-center justify-center">
+                            <div class="text-center text-white p-8">
+                                <div class="animate-spin w-12 h-12 border-4 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
+                                <h2 class="text-2xl font-bold mb-2">🎉 Sending Birthday Wishes...</h2>
+                                <p>Please wait while we deliver your special message!</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Auto-send after 2 seconds
+                    setTimeout(() => {
+                        sendBirthdayWish(decodedData);
+                        
+                        // Show success message
+                        document.body.innerHTML = `
+                            <div class="min-h-screen birthday-gradient flex items-center justify-center">
+                                <div class="text-center text-white p-8 max-w-md">
+                                    <div class="text-6xl mb-4">🎉</div>
+                                    <h2 class="text-3xl font-bold mb-4">Birthday Wishes Sent!</h2>
+                                    <p class="text-lg mb-6">The birthday message has been delivered successfully!</p>
+                                    <div class="bg-white/20 p-4 rounded-lg mb-6">
+                                        <p class="text-sm"><strong>To:</strong> ${decodedData.birthdayPersonName}</p>
+                                        <p class="text-sm"><strong>From:</strong> ${decodedData.senderName}</p>
+                                    </div>
+                                    <button onclick="window.location.href='${window.location.origin}${window.location.pathname}'" 
+                                        class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                                        Create New Wish
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('Error loading wish from URL:', error);
+                }
+            }
+        }
+
+        // Initialize min time for delivery scheduling
+        document.addEventListener('DOMContentLoaded', function() {
+            const deliveryTimeInput = document.getElementById('deliveryTime');
+            const now = new Date();
+            now.setMinutes(now.getMinutes() + 1);
+            deliveryTimeInput.min = now.toISOString().slice(0, 16);
+            
+            // Load wish from URL if present
+            loadWishFromURL();
+        });
+    </script>
+</body>
+</html>
+
